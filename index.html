@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random City Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #city-info {
+            padding: 20px;
+            border: 1px solid #ddd;
+            display: inline-block;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Random City Information</h1>
+    <div id="city-info">Loading...</div>
+
+    <script>
+        async function fetchAndDisplayCity() {
+            const response = await fetch('worldcities.csv'); // Adjust path if needed
+            const data = await response.text();
+            const rows = data.split("\n").slice(1); // Skip header
+
+            // Ensure there's data
+            if (rows.length < 2) {
+                document.getElementById("city-info").innerText = "No city data available.";
+                return;
+            }
+
+            // Choose a random row
+            const randomRow = rows[Math.floor(Math.random() * rows.length)];
+            const columns = randomRow.split(",");
+
+            // Assuming columns: city, country, population, lat, lng (Modify if different)
+            const city = columns[0];
+            const country = columns[1];
+            const population = columns[2];
+            const lat = columns[3];
+            const lng = columns[4];
+
+            // Display city info
+            document.getElementById("city-info").innerHTML = `
+                <h2>${city}, ${country}</h2>
+                <p><strong>Population:</strong> ${population}</p>
+                <p><strong>Coordinates:</strong> ${lat}, ${lng}</p>
+            `;
+        }
+
+        fetchAndDisplayCity();
+    </script>
+</body>
+</html>
